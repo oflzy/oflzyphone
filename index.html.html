@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT购物平台 - 高级版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* 全局样式 */
+        :root {
+            --primary: #0a84ff;
+            --primary-dark: #0071e3;
+            --secondary: #32d74b;
+            --dark: #1d1d1f;
+            --light: #f5f5f7;
+            --gray: #86868b;
+            --success: #30d158;
+            --warning: #ffd60a;
+            --danger: #ff453a;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --card-border: rgba(255, 255, 255, 0.4);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #a2a9b4, #8e9aaf);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            background-image: url('https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* 毛玻璃效果层 */
+        .frosted-glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        /* 头部样式 */
+        header {
+            text-align: center;
+            padding: 50px 0 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: transform 0.5s ease;
+            background: rgba(255, 255, 255, 0.3);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo:hover {
+            transform: rotate(15deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            font-weight: 300;
+            color: #333;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #000;
+            display: flex;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            color: var(--primary);
+            background: rgba(10, 132, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 产品网格 */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .product {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            padding: 25px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+        }
+        
+        .product:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .product:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: rgba(10, 132, 255, 0.3);
+        }
+        
+        .product:hover:before {
+            opacity: 0.3;
+        }
+        
+        .product.selected {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 25px rgba(10, 132, 255, 0.2);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(5px);
+        }
+        
+        .phone .product-img {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(245, 245, 247, 0.5));
+        }
+        
+        .card .product-img {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(245, 245, 247, 0.5));
+        }
+        
+        .gas .product-img {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(245, 245, 247, 0.5));
+        }
+        
+        .product-img img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+        
+        .product-img .icon {
+            font-size: 5rem;
+            color: var(--primary);
+            text-shadow: 0 5px 15px rgba(10, 132, 255, 0.2);
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+        
+        .product-details {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            min-height: 60px;
+            color: var(--gray);
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1rem;
+            letter-spacing: -0.3px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(10, 132, 255, 0.2);
+        }
+        
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(25deg);
+            transition: all 0.6s;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+        }
+        
+        .btn:hover:after {
+            left: 120%;
+        }
+        
+        .btn:disabled {
+            background: #a7a7a7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn:disabled:after {
+            display: none;
+        }
+        
+        /* 卡片信息 */
+        .card-info {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .card-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* 支付区域 */
+        .payment-section {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .address {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 18px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            word-break: break-all;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgba(10, 132, 255, 0.1);
+            border: none;
+            color: var(--primary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .copy-btn:hover {
+            background: rgba(10, 132, 255, 0.2);
+        }
+        
+        .disclaimer-section {
+            background: rgba(255, 69, 58, 0.1);
+            padding: 20px;
+            border-radius: 18px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 69, 58, 0.15);
+            font-size: 0.85rem;
+        }
+        
+        .disclaimer-section h3 {
+            color: var(--danger);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .disclaimer-section h3 i {
+            margin-right: 8px;
+        }
+        
+        .timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 25px 0;
+            color: var(--primary);
+            display: none;
+            text-align: center;
+            font-family: monospace;
+            text-shadow: 0 0 10px rgba(10, 132, 255, 0.2);
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .phone-deposit {
+            background: rgba(255, 214, 10, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(255, 214, 10, 0.15);
+        }
+        
+        .phone-deposit i {
+            margin-right: 10px;
+            color: var(--warning);
+        }
+        
+        .payment-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .payment-controls .btn {
+            flex: 1;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #a7a7a7, #8e8e93);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #8e8e93, #7c7c80);
+        }
+        
+        .btn-success {
+            background: linear-gradient(90deg, var(--success), #2ac844);
+        }
+        
+        .payment-status {
+            padding: 18px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(255, 214, 10, 0.1);
+            border: 1px solid rgba(255, 214, 10, 0.15);
+            color: var(--warning);
+        }
+        
+        .status-failed {
+            background: rgba(255, 69, 58, 0.1);
+            border: 1px solid rgba(255, 69, 58, 0.15);
+            color: var(--danger);
+        }
+        
+        .selected-product-info {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .security-badge {
+            display: inline-block;
+            background: rgba(48, 209, 88, 0.1);
+            color: var(--success);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            border: 1px solid rgba(48, 209, 88, 0.15);
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 15px;
+        }
+        
+        .nav-item {
+            padding: 12px 25px;
+            margin: 0 5px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--gray);
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-item:hover {
+            background: rgba(10, 132, 255, 0.15);
+            color: var(--primary);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 5px 15px rgba(10, 132, 255, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .usdt-rate {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            background: rgba(10, 132, 255, 0.1);
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 30px;
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* 客服聊天框 */
+        .chat-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 5px 20px rgba(10, 132, 255, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        
+        .chat-icon:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(10, 132, 255, 0.4);
+        }
+        
+        .chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: slideUp 0.4s ease;
+        }
+        
+        .chat-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            font-weight: 500;
+        }
+        
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .close-chat:hover {
+            transform: rotate(90deg);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-bubble {
+            padding: 12px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .received .message-bubble {
+            background: rgba(255, 255, 255, 0.8);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .sent .message-bubble {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .chat-input button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 收货信息表单 */
+        .shipping-form {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #333;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .virtual-card-notice {
+            background: rgba(10, 132, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            display: none;
+        }
+        
+        .ai-tag {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--warning);
+            color: #333;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .product-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .online {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frosted-glass">
+            <header>
+                <div class="logo">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h1>USDT购物平台</h1>
+                <p class="subtitle">使用USDT购买最新款手机、京东E卡和中石化加油卡</p>
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i> 安全交易 | 无XSS/RCE漏洞
+                    <span class="status-indicator online"></span> 在线
+                </div>
+                <div class="usdt-rate">
+                    <i class="fas fa-sync-alt"></i> 当前汇率: 1 USDT = ¥7.2
+                </div>
+            </header>
+            
+            <div class="nav">
+                <div class="nav-item active" data-tab="phones">手机</div>
+                <div class="nav-item" data-tab="cards">京东E卡</div>
+                <div class="nav-item" data-tab="gas">加油卡</div>
+            </div>
+            
+            <div class="tab-content active" id="phones">
+                <div class="card">
+                    <h2><i class="fas fa-mobile-alt"></i> 最新款手机</h2>
+                    <div class="phone-deposit">
+                        <i class="fas fa-info-circle"></i>
+                        <span>手机购买需支付100 USDT定金，配货完成后支付尾款</span>
+                    </div>
+                    
+                    <div class="products">
+                        <div class="product phone" data-type="phone" data-name="iPhone 15 Pro Max" data-price="1375" data-deposit="100">
+                            <div class="product-tag">热卖</div>
+                            <div class="product-img">
+                                <div class="icon">📱</div>
+                            </div>
+                            <h3 class="product-title">iPhone 15 Pro Max</h3>
+                            <div class="product-details">
+                                6.7英寸超视网膜XDR显示屏，A17仿生芯片，4800万像素主摄
+                            </div>
+                            <div class="product-price">
+                                <span>¥9,899</span>
+                                <span>1,375 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product phone" data-type="phone" data-name="Samsung Galaxy S24 Ultra" data-price="1347" data-deposit="100">
+                            <div class="product-img">
+                                <div class="icon">📱</div>
+                            </div>
+                            <h3 class="product-title">Samsung Galaxy S24 Ultra</h3>
+                            <div class="product-details">
+                                6.8英寸Dynamic AMOLED 2X，骁龙8 Gen 3，2亿像素主摄
+                            </div>
+                            <div class="product-price">
+                                <span>¥9,699</span>
+                                <span>1,347 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product phone" data-type="phone" data-name="Huawei Mate 60 Pro" data-price="972" data-deposit="100">
+                            <div class="product-tag">新品</div>
+                            <div class="product-img">
+                                <div class="icon">📱</div>
+                            </div>
+                            <h3 class="product-title">Huawei Mate 60 Pro</h3>
+                            <div class="product-details">
+                                6.82英寸OLED曲面屏，麒麟9000S芯片，5000万像素超光变摄像头
+                            </div>
+                            <div class="product-price">
+                                <span>¥6,999</span>
+                                <span>972 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product phone" data-type="phone" data-name="Xiaomi 14 Pro" data-price="694" data-deposit="100">
+                            <div class="product-img">
+                                <div class="icon">📱</div>
+                            </div>
+                            <h3 class="product-title">Xiaomi 14 Pro</h3>
+                            <div class="product-details">
+                                6.73英寸AMOLED曲面屏，骁龙8 Gen 3，徕卡三摄系统
+                            </div>
+                            <div class="product-price">
+                                <span>¥4,999</span>
+                                <span>694 USDT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="cards">
+                <div class="card">
+                    <h2><i class="fas fa-gift"></i> 京东E卡</h2>
+                    <div class="card-info">
+                        <h3>购买说明</h3>
+                        <p>京东E卡为虚拟卡，购买后通过短信或邮箱发送卡号密码，无需定金</p>
+                        <p>支持面额：¥200、¥500、¥1000，最高可购买¥5000面额</p>
+                    </div>
+                    
+                    <div class="products">
+                        <div class="product card" data-type="card" data-name="京东E卡 ¥200" data-price="27.8">
+                            <div class="product-img">
+                                <div class="icon">💳</div>
+                            </div>
+                            <h3 class="product-title">京东E卡 ¥200</h3>
+                            <div class="product-details">
+                                京东自营全品类通用，有效期36个月
+                            </div>
+                            <div class="product-price">
+                                <span>¥200</span>
+                                <span>27.8 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product card" data-type="card" data-name="京东E卡 ¥500" data-price="69.4">
+                            <div class="product-img">
+                                <div class="icon">💳</div>
+                            </div>
+                            <h3 class="product-title">京东E卡 ¥500</h3>
+                            <div class="product-details">
+                                京东自营全品类通用，有效期36个月
+                            </div>
+                            <div class="product-price">
+                                <span>¥500</span>
+                                <span>69.4 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product card" data-type="card" data-name="京东E卡 ¥1000" data-price="138.9">
+                            <div class="product-tag">推荐</div>
+                            <div class="product-img">
+                                <div class="icon">💳</div>
+                            </div>
+                            <h3 class="product-title">京东E卡 ¥1000</h3>
+                            <div class="product-details">
+                                京东自营全品类通用，有效期36个月
+                            </div>
+                            <div class="product-price">
+                                <span>¥1000</span>
+                                <span>138.9 USDT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="gas">
+                <div class="card">
+                    <h2><i class="fas fa-gas-pump"></i> 中石化加油卡</h2>
+                    <div class="card-info">
+                        <h3>购买说明</h3>
+                        <p>中石化加油卡为实体卡，购买后邮寄，全国通用，无需定金</p>
+                        <p>支持面额：¥200、¥500、¥1000</p>
+                    </div>
+                    
+                    <div class="products">
+                        <div class="product gas" data-type="gas" data-name="中石化加油卡 ¥200" data-price="27.8">
+                            <div class="product-img">
+                                <div class="icon">⛽</div>
+                            </div>
+                            <h3 class="product-title">中石化加油卡 ¥200</h3>
+                            <div class="product-details">
+                                全国中石化加油站通用，有效期长期
+                            </div>
+                            <div class="product-price">
+                                <span>¥200</span>
+                                <span>27.8 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product gas" data-type="gas" data-name="中石化加油卡 ¥500" data-price="69.4">
+                            <div class="product-tag">热卖</div>
+                            <div class="product-img">
+                                <div class="icon">⛽</div>
+                            </div>
+                            <h3 class="product-title">中石化加油卡 ¥500</h3>
+                            <div class="product-details">
+                                全国中石化加油站通用，有效期长期
+                            </div>
+                            <div class="product-price">
+                                <span>¥500</span>
+                                <span>69.4 USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="product gas" data-type="gas" data-name="中石化加油卡 ¥1000" data-price="138.9">
+                            <div class="product-img">
+                                <div class="icon">⛽</div>
+                            </div>
+                            <h3 class="product-title">中石化加油卡 ¥1000</h3>
+                            <div class="product-details">
+                                全国中石化加油站通用，有效期长期
+                            </div>
+                            <div class="product-price">
+                                <span>¥1000</span>
+                                <span>138.9 USDT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-section" id="paymentSection">
+                <h2><i class="fas fa-credit-card"></i> 支付信息</h2>
+                
+                <div class="selected-product-info" id="selectedProductInfo">
+                    <!-- 动态填充商品信息 -->
+                </div>
+                
+                <!-- 收货信息表单（仅手机显示） -->
+                <div class="shipping-form" id="shippingForm">
+                    <h3><i class="fas fa-truck"></i> 收货信息</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">收货人姓名</label>
+                            <input type="text" id="fullName" placeholder="请输入收货人姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">手机号码</label>
+                            <input type="tel" id="phone" placeholder="11位手机号码" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">详细地址</label>
+                        <input type="text" id="address" placeholder="请输入详细收货地址">
+                    </div>
+                </div>
+                
+                <!-- 虚拟卡提示 -->
+                <div class="virtual-card-notice" id="virtualCardNotice">
+                    <i class="fas fa-info-circle"></i> 虚拟商品付款后请通过右下角客服联系确认
+                </div>
+                
+                <p>请向以下地址支付相应金额的USDT：</p>
+                <div class="address">
+                    TUFc9diwZXTMkoRnhLX3CD2axyygamEVX3
+                    <button class="copy-btn" id="copyAddress">
+                        <i class="fas fa-copy"></i> 复制
+                    </button>
+                </div>
+                <p>网络: <span class="highlight">TRC20 (TRX20)</span></p>
+                
+                <div class="payment-status status-pending" id="paymentPending">
+                    <i class="fas fa-spinner fa-spin"></i> 等待支付确认...
+                </div>
+                
+                <div class="payment-status status-failed" id="paymentFailed">
+                    <i class="fas fa-exclamation-circle"></i> 付款失败：USDT未到账
+                </div>
+                
+                <div class="timer" id="paymentTimer">
+                    30
+                </div>
+                
+                <div class="payment-controls">
+                    <button class="btn btn-success" id="confirmPayment">
+                        <i class="fas fa-check-circle"></i> 确认已付款
+                    </button>
+                    <button class="btn btn-secondary" id="cancelPayment">
+                        <i class="fas fa-times-circle"></i> 取消支付
+                    </button>
+                </div>
+            </div>
+            
+            <div class="disclaimer-section">
+                <h3><i class="fas fa-exclamation-triangle"></i> 免责声明</h3>
+                <p>1. 本平台仅为商品展示平台，所有交易需用户自行确认</p>
+                <p>2. 支付状态由系统自动检测，可能存在延迟</p>
+                <p>3. 手机购买需支付定金，虚拟卡购买无需定金</p>
+                <p>4. 支付完成后，请保存交易哈希(TxID)作为凭证</p>
+                <p>5. 本平台不存储用户任何敏感信息</p>
+            </div>
+            
+            <footer>
+                <p>USDT购物平台 &copy; 2023 - 安全便捷的数字货币购物体验</p>
+                <p>基于区块链技术的安全支付解决方案</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- 客服聊天图标 -->
+    <div class="chat-icon" id="chatIcon">
+        <i class="fas fa-comments"></i>
+    </div>
+    
+    <!-- 客服聊天框 -->
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            <h3>智能客服支持</h3>
+            <button class="close-chat" id="closeChat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message received">
+                <div class="message-bubble">
+                    您好！我是智能客服助手，有什么可以帮您的？
+                    <div class="ai-tag">AI</div>
+                </div>
+                <div class="message-time">10:00</div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="输入您的问题...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // 安全处理：防止XSS攻击
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+        
+        // 当前选中的商品
+        let selectedProduct = null;
+        let paymentTimer = null;
+        let timeLeft = 30;
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 商品选择事件
+            document.querySelectorAll('.product').forEach(product => {
+                product.addEventListener('click', function() {
+                    // 移除之前选中的商品
+                    document.querySelectorAll('.product').forEach(p => p.classList.remove('selected'));
+                    
+                    // 选中当前商品
+                    this.classList.add('selected');
+                    
+                    // 存储选中商品信息
+                    selectedProduct = {
+                        type: this.getAttribute('data-type'),
+                        name: this.getAttribute('data-name'),
+                        price: this.getAttribute('data-price'),
+                        deposit: this.getAttribute('data-deposit') || "0"
+                    };
+                    
+                    // 显示支付区域
+                    const paymentSection = document.getElementById('paymentSection');
+                    paymentSection.style.display = 'block';
+                    paymentSection.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    
+                    // 更新选中商品信息
+                    const productInfo = document.getElementById('selectedProductInfo');
+                    productInfo.style.display = 'block';
+                    
+                    if (selectedProduct.type === 'phone') {
+                        productInfo.innerHTML = `
+                            <h3>${escapeHtml(selectedProduct.name)}</h3>
+                            <p>定金: <span class="highlight">100 USDT</span></p>
+                            <p>总价: <span class="highlight">${escapeHtml(selectedProduct.price)} USDT</span></p>
+                        `;
+                        // 显示收货表单
+                        document.getElementById('shippingForm').style.display = 'block';
+                        // 隐藏虚拟卡提示
+                        document.getElementById('virtualCardNotice').style.display = 'none';
+                    } else {
+                        productInfo.innerHTML = `
+                            <h3>${escapeHtml(selectedProduct.name)}</h3>
+                            <p>价格: <span class="highlight">${escapeHtml(selectedProduct.price)} USDT</span></p>
+                        `;
+                        // 隐藏收货表单
+                        document.getElementById('shippingForm').style.display = 'none';
+                        // 显示虚拟卡提示
+                        document.getElementById('virtualCardNotice').style.display = 'block';
+                    }
+                    
+                    // 重置支付状态
+                    resetPaymentStatus();
+                });
+            });
+            
+            // 导航标签切换
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const tab = this.getAttribute('data-tab');
+                    
+                    // 更新导航状态
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 显示对应标签内容
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+            
+            // 复制地址
+            document.getElementById('copyAddress').addEventListener('click', function() {
+                const address = 'TUFc9diwZXTMkoRnhLX3CD2axyygamEVX3';
+                navigator.clipboard.writeText(address).then(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy"></i> 复制';
+                    }, 2000);
+                });
+            });
+            
+            // 确认付款
+            document.getElementById('confirmPayment').addEventListener('click', function() {
+                // 如果是手机，验证收货信息
+                if (selectedProduct.type === 'phone') {
+                    const fullName = document.getElementById('fullName').value;
+                    const phone = document.getElementById('phone').value;
+                    const address = document.getElementById('address').value;
+                    
+                    if (!fullName || !phone || !address) {
+                        alert('请填写完整的收货信息');
+                        return;
+                    }
+                    
+                    if (!/^\d{11}$/.test(phone)) {
+                        alert('请输入有效的11位手机号码');
+                        return;
+                    }
+                }
+                
+                // 显示等待状态
+                document.getElementById('paymentPending').style.display = 'block';
+                document.getElementById('paymentTimer').style.display = 'block';
+                
+                // 禁用按钮
+                document.getElementById('confirmPayment').disabled = true;
+                document.getElementById('cancelPayment').disabled = true;
+                
+                // 开始倒计时
+                startPaymentTimer();
+            });
+            
+            // 取消付款
+            document.getElementById('cancelPayment').addEventListener('click', function() {
+                // 取消选择
+                document.querySelectorAll('.product').forEach(p => p.classList.remove('selected'));
+                document.getElementById('paymentSection').style.display = 'none';
+                resetPaymentStatus();
+                selectedProduct = null;
+            });
+            
+            // 客服聊天功能
+            document.getElementById('chatIcon').addEventListener('click', function() {
+                document.getElementById('chatBox').style.display = 'flex';
+            });
+            
+            document.getElementById('closeChat').addEventListener('click', function() {
+                document.getElementById('chatBox').style.display = 'none';
+            });
+            
+            document.getElementById('sendMessage').addEventListener('click', sendMessage);
+            
+            // 按回车发送消息
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+        
+        // 开始支付倒计时
+        function startPaymentTimer() {
+            timeLeft = 30;
+            updateTimerDisplay();
+            
+            paymentTimer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(paymentTimer);
+                    showPaymentFailed();
+                }
+            }, 1000);
+        }
+        
+        // 更新计时器显示
+        function updateTimerDisplay() {
+            document.getElementById('paymentTimer').textContent = timeLeft;
+        }
+        
+        // 显示支付失败
+        function showPaymentFailed() {
+            document.getElementById('paymentPending').style.display = 'none';
+            document.getElementById('paymentFailed').style.display = 'block';
+            document.getElementById('paymentTimer').style.display = 'none';
+            
+            // 启用取消按钮
+            document.getElementById('cancelPayment').disabled = false;
+            document.getElementById('cancelPayment').textContent = '关闭';
+            document.getElementById('cancelPayment').innerHTML = '<i class="fas fa-times-circle"></i> 关闭';
+        }
+        
+        // 重置支付状态
+        function resetPaymentStatus() {
+            clearInterval(paymentTimer);
+            document.getElementById('paymentPending').style.display = 'none';
+            document.getElementById('paymentFailed').style.display = 'none';
+            document.getElementById('paymentTimer').style.display = 'none';
+            
+            document.getElementById('confirmPayment').disabled = false;
+            document.getElementById('cancelPayment').disabled = false;
+            document.getElementById('cancelPayment').innerHTML = '<i class="fas fa-times-circle"></i> 取消支付';
+        }
+        
+        // 发送消息
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // 添加用户消息
+                addMessage(message, 'sent');
+                input.value = '';
+                
+                // 智能回复
+                setTimeout(() => {
+                    let response = "";
+                    
+                    // 检测是否询问手机是否为最新款
+                    if (message.includes("最新款") || message.includes("新款") || 
+                        message.includes("新机型") || message.includes("最新型号")) {
+                        response = "是的，我们提供的所有手机都是最新款，包括iPhone 15系列、三星S24系列、华为Mate 60系列和小米14系列等。";
+                    }
+                    // 检测用户是否未下单
+                    else if ((message.includes("订单") || message.includes("下单") || message.includes("咨询")) && !selectedProduct) {
+                        response = "您好，检测到您尚未选择任何商品。请先下单后再咨询相关问题。";
+                    }
+                    // 检测支付问题
+                    else if (message.includes("支付") || message.includes("付款") || message.includes("转账")) {
+                        response = "支付相关问题：请使用TRC20网络转账至指定地址，完成支付后请保存交易哈希(TxID)并联系客服确认。";
+                    }
+                    // 默认回复
+                    else {
+                        response = "感谢您的咨询！请将您的订单信息和USDT交易哈希(TxID)发送给我们，我们将尽快为您处理。";
+                    }
+                    
+                    addMessage(response, 'received');
+                }, 1000);
+            }
+        }
+        
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const now = new Date();
+            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            // 为客服消息添加AI标签
+            if (type === 'received') {
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">
+                        ${escapeHtml(text)}
+                        <div class="ai-tag">AI</div>
+                    </div>
+                    <div class="message-time">${time}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">${escapeHtml(text)}</div>
+                    <div class="message-time">${time}</div>
+                `;
+            }
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
